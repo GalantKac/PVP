@@ -1,0 +1,24 @@
+{
+  "name": "pvpgameserver",
+  "version": "1.0.0",
+  "description": "Server dla gry PVP",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GalantKac/PVP.git"
+  },
+  "author": "Kacper Galantowicz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GalantKac/PVP/issues"
+  },
+  "homepage": "https://github.com/GalantKac/PVP#readme",
+  "dependencies": {
+    "nodemon": "^2.0.2",
+    "shortid": "^2.2.15",
+    "socket.io": "^2.3.0"
+  }
+}
