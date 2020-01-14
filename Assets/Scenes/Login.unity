@@ -2143,6 +2143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c58299743527964c907557ae9596164, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputEmail: {fileID: 106317170}
+  inputPassword: {fileID: 231171774}
   warrning: {fileID: 1494790763}
 --- !u!4 &1195689359
 Transform:
