@@ -64,3 +64,23 @@ exports.deleteUser = (req, res) => {
             res.end();
         });
 };
+
+exports.changeUserStats = (req, res) => {
+    db.User.findByPk(req.params.id).then((user) => {
+        if (user) {
+            if (req.body.wins) {
+                (user.wins = req.body.wins),
+                    user.save().then((user) => {
+                        ret.json(user, res);
+                    });
+            } else if (req.body.loses) {
+                (user.loses = req.body.loses),
+                    user.save().then((user) => {
+                        ret.json(user, res);
+                    });
+            } else {
+                res.end();
+            }
+        }
+    });
+};
