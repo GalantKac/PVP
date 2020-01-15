@@ -1,11 +1,16 @@
-const io = require('socket.io')(process.env.PORT || 3000);
+const socket = require('socket.io');
+const app = require('./app');
+const db = require('./data');
 
-const Player = require('../Server/Classes/Player');
+db.initialiseDatabase(false,null);
+const io = socket(app.listen(process.env.PORT || 3000, () =>{
+    console.log('App running on port 3000 or default');
+}));
+
+const Player = require('./Classes/Player');
 
 let players = [];
 let sockets = [];
-
-console.log('Server has started');
 
 io.on('connection', (socket) => {
         console.log('Connection mode');
