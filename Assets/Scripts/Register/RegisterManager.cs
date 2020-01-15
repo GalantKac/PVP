@@ -8,7 +8,6 @@ using UnityEngine.Networking;
 public class RegisterManager : MonoBehaviour
 {
     string registerURL = "http://127.0.0.1:3000/users";
-    string url = "http://127.0.0.1:3000/users/14";
 
     [SerializeField]
     TextMeshProUGUI inputEmail;
@@ -17,18 +16,25 @@ public class RegisterManager : MonoBehaviour
     [SerializeField]
     TMP_InputField inputPassword;
     [SerializeField]
-    GameObject warriningMessage;
+    GameObject warrningMessage;
 
     private void Start()
     {
-        warriningMessage.SetActive(false);
-        // StartCoroutine(Get(url));
+        warrningMessage.SetActive(false);
     }
 
     public void CreateUser()
     {
-        User newUser = new User(inputEmail.text.TrimEnd('\u200b'), inputPassword.text.TrimEnd('\u200b'), inputName.text.TrimEnd('\u200b'));
-        StartCoroutine(RegisterUser(registerURL, newUser));
+        if (inputName.text == "" || inputPassword.text == "" || inputEmail.text == "")
+        {
+            warrningMessage.SetActive(true);
+        }
+        else
+        {
+            warrningMessage.SetActive(false);
+            User newUser = new User(inputEmail.text.TrimEnd('\u200b'), inputPassword.text.TrimEnd('\u200b'), inputName.text.TrimEnd('\u200b'));
+            StartCoroutine(RegisterUser(registerURL, newUser));
+        }
     }
 
     public void BackToLogin()
@@ -39,7 +45,7 @@ public class RegisterManager : MonoBehaviour
     private IEnumerator RegisterUser(string url, User user)
     {
         var jsonData = JsonUtility.ToJson(user);
-        Debug.Log(jsonData);
+        Debug.Log("JSONdata: " + jsonData);
 
         using (UnityWebRequest www = UnityWebRequest.Post(url, jsonData))
         {
@@ -48,7 +54,7 @@ public class RegisterManager : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonData));
             yield return www.SendWebRequest();
 
-            if (www.isNetworkError)
+            if (www.isNetworkError || www.isHttpError)
             {
                 Debug.Log(www.error);
             }
@@ -56,37 +62,8 @@ public class RegisterManager : MonoBehaviour
             {
                 if (www.isDone)
                 {
-                    Debug.Log("Created");
-                }
-                else
-                {
-                    //handle the problem
-                    Debug.Log("Error! data couldn't get.");
-                }
-            }
-        }
-    }
-
-    public IEnumerator Get(string url)
-    {
-        using (UnityWebRequest www = UnityWebRequest.Get(url))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.isNetworkError)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                if (www.isDone)
-                {
-                    // handle the result
-                    var result = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
-                    Debug.Log(result);
-
-                    string user = JsonUtility.FromJson<User>(result).ToString();
-                    Debug.Log(user);
+                    Debug.Log("Created User");
+                    SceneManager.LoadScene("Login");
                 }
                 else
                 {

@@ -26,6 +26,10 @@ const User = sequelize.define("User",{
     nick: Sequelize.STRING,
     wins: Sequelize.INTEGER,
     loses: Sequelize.INTEGER
+},{
+    timestamps: false,
+    createdAt: false,
+    updatedAt: false
 });
 
 //  SYNC SCHEMA

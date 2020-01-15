@@ -14,17 +14,24 @@ public class LoginManager : MonoBehaviour
     [SerializeField]
     TMP_InputField inputPassword;
     [SerializeField]
-    GameObject warrning;
+    GameObject warrningMessage;
     public void Start()
     {
-        warrning.SetActive(false);
+        warrningMessage.SetActive(false);
     }
 
     public void Login()
     {
-        User loginUser = new User(inputEmail.text.TrimEnd('\u200b'), inputPassword.text.TrimEnd('\u200b'));
-        StartCoroutine(PostLogin(loginUrl, loginUser));
-        // SceneManager.LoadScene("Menu");
+        if (inputPassword.text == "" || inputEmail.text == "")
+        {
+            warrningMessage.SetActive(true);
+        }
+        else
+        {
+            warrningMessage.SetActive(false);
+            User loginUser = new User(inputEmail.text.TrimEnd('\u200b'), inputPassword.text.TrimEnd('\u200b'));
+            StartCoroutine(PostLogin(loginUrl, loginUser));
+        }
     }
 
     public void Register()
@@ -40,7 +47,7 @@ public class LoginManager : MonoBehaviour
     private IEnumerator PostLogin(string url, User user)
     {
         var jsonData = JsonUtility.ToJson(user);
-        Debug.Log(jsonData);
+        Debug.Log("JSONdata: " + jsonData);
 
         using (UnityWebRequest www = UnityWebRequest.Post(url, jsonData))
         {
@@ -49,7 +56,7 @@ public class LoginManager : MonoBehaviour
             www.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonData));
             yield return www.SendWebRequest();
 
-            if (www.isNetworkError)
+            if (www.isNetworkError || www.isHttpError)
             {
                 Debug.Log(www.error);
             }
@@ -57,7 +64,13 @@ public class LoginManager : MonoBehaviour
             {
                 if (www.isDone)
                 {
-                    Debug.Log("Login");
+                    // handle the result
+                    string result = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
+                    Debug.Log(result);
+                    User resultUser = JsonUtility.FromJson<User>(result);
+
+                    LoggedInPlayer.instance.user = resultUser;
+                    SceneManager.LoadScene("Menu");
                 }
                 else
                 {
