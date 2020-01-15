@@ -10,27 +10,24 @@ public class RegisterManager : MonoBehaviour
     string registerURL = "http://127.0.0.1:3000/users";
     string url = "http://127.0.0.1:3000/users/14";
 
-    [Multiline]
-    public string user;
-
     [SerializeField]
     TextMeshProUGUI inputEmail;
     [SerializeField]
     TextMeshProUGUI inputName;
     [SerializeField]
-    TextMeshProUGUI inputPassword;
+    TMP_InputField inputPassword;
     [SerializeField]
     GameObject warriningMessage;
 
     private void Start()
     {
         warriningMessage.SetActive(false);
-        StartCoroutine(Get(url));
+        // StartCoroutine(Get(url));
     }
 
     public void CreateUser()
     {
-        User newUser = new User(inputEmail.text, inputPassword.text);
+        User newUser = new User(inputEmail.text.TrimEnd('\u200b'), inputPassword.text.TrimEnd('\u200b'), inputName.text.TrimEnd('\u200b'));
         StartCoroutine(RegisterUser(registerURL, newUser));
     }
 
@@ -70,7 +67,6 @@ public class RegisterManager : MonoBehaviour
         }
     }
 
-
     public IEnumerator Get(string url)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(url))
@@ -89,7 +85,7 @@ public class RegisterManager : MonoBehaviour
                     var result = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
                     Debug.Log(result);
 
-                    user = JsonUtility.FromJson<User>(result).ToString();
+                    string user = JsonUtility.FromJson<User>(result).ToString();
                     Debug.Log(user);
                 }
                 else
