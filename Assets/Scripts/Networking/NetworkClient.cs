@@ -12,6 +12,10 @@ namespace Project.Networiking
         [SerializeField]
         private Transform playersContainer;
 
+        [SerializeField] GameObject[] characters;
+
+        [SerializeField] Transform[] spawnPoints;
+
         private Dictionary<string, GameObject> serverObjects;
         public override void Start()
         {
@@ -31,10 +35,6 @@ namespace Project.Networiking
 
         private void setupEvents()
         {
-            On("open", (e) =>
-            {
-                Debug.Log("User connected with server");
-            });
 
             On("register", (e) =>
             {
@@ -46,10 +46,14 @@ namespace Project.Networiking
             On("spawn", (e) =>
             {
                 string id = e.data["id"].ToString().RemoveQuotes();
-
-                GameObject newPlayer = new GameObject("Server ID: " + id);
-                newPlayer.transform.SetParent(playersContainer);
-                serverObjects.Add(id, newPlayer);
+                
+                GameObject firstPlayer = Instantiate(characters[Random.Range(0,2)], spawnPoints[Random.Range(0,2)].position, Quaternion.identity);
+                firstPlayer.name = "Server ID: " + id;
+                // GameObject newPlayer = new GameObject("Server ID: " + id);
+                // newPlayer.transform.SetParent(playersContainer);
+                firstPlayer.transform.SetParent(playersContainer);
+                //  serverObjects.Add(id, newPlayer);
+                serverObjects.Add(id, firstPlayer);
             });
 
             On("disconnected", (e) =>

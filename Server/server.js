@@ -2,46 +2,54 @@ const socket = require('socket.io');
 const app = require('./app');
 const db = require('./data');
 
-db.initialiseDatabase(false,null);
-const io = socket(app.listen(process.env.PORT || 3000, () =>{
+db.initialiseDatabase(false, null);
+const io = socket(app.listen(process.env.PORT || 3000, () => {
     console.log('App running on port 3000 or default');
 }));
 
-const Player = require('./Classes/Player');
+const User = require('./Classes/User');
 
-let players = [];
+let users = [];
 let sockets = [];
 
 io.on('connection', (socket) => {
         console.log('Connection mode');
 
-        const player = new Player();
-        const thisPlayerId = player.id;
+        let user = new User();
+        let thisUserId = 0;
 
-        players[thisPlayerId] = player;
-        sockets[thisPlayerId] = socket;
+        socket.on('loginCompleted', (loginUser) => {
 
-        //wysylanie informacji tylko do tego gracza
-        socket.emit('register', {id: thisPlayerId});
-        // wysylanie inforamcji ze sie stowrzylem
-        socket.emit('spawn', player);
-        // wysylanie inforamcji do innych ze sie stworzylem
-        socket.broadcast.emit('spawn', player);
+            user = loginUser;
+            thisUserId = loginUser.id;
 
-        //powiedz mi kto jest w grze
-        for (let playerID in players) {
-            if (playerID != thisPlayerId) {
-                {
-                    socket.emit('spawn', players[thisPlayerId])
+            socket.on('join', () => {
+                users[thisUserId] = user;
+                sockets[thisUserId] = socket;
+                console.log('Join to game Player: ' + thisUserId);
+
+                //wysylanie inforamcji ze sie stowrzylem
+                socket.emit('spawn', user);
+
+                // wysylanie inforamcji do innych ze sie stworzylem
+                socket.broadcast.emit('spawn', user);
+
+                //powiedz mi kto jest w grze
+                for (let playerID in users) {
+                    if (playerID != thisUserId) {
+                        {
+                            socket.emit('spawn', users[thisUserId])
+                        }
+                    }
                 }
-            }
-        }
+            });
+        });
 
         socket.on('disconnect', () => {
             console.log('User disconnected');
-            delete players[thisPlayerId];
-            delete sockets[thisPlayerId];
-            socket.broadcast.emit('disconnected', player);
+            delete users[thisUserId];
+            delete sockets[thisUserId];
+            socket.broadcast.emit('disconnected', user);
         })
     }
 );
