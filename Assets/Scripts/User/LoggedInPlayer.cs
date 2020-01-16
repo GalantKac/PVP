@@ -5,7 +5,13 @@ using UnityEngine;
 public class LoggedInPlayer : MonoBehaviour
 {
     static public LoggedInPlayer instance = null;
+    [Header("Network Manager")]
     public NetworkManager networkManager = null;
+    [Header("Player")]
+    public GameObject yourPlayer = null;
+    [Header("Player position")]
+    public Vector3 oldPosition = Vector3.zero;
+    private float refreshTimer = 0;
 
     [Header("Active Player")]
     public User user;
@@ -21,5 +27,32 @@ public class LoggedInPlayer : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         networkManager = GetComponent<NetworkManager>();
+    }
+
+    private void Update()
+    {
+        if (yourPlayer != null)
+        {
+            if (oldPosition != yourPlayer.transform.position)
+            {
+                oldPosition = yourPlayer.transform.position;
+                refreshTimer = 0;
+                user.x = yourPlayer.transform.position.x.ToString();
+                user.y = yourPlayer.transform.position.y.ToString();
+                networkManager.UpdatePosition(user);
+            }
+            else
+            {
+                refreshTimer += Time.deltaTime;
+
+                if (refreshTimer >= 1)
+                {
+                    refreshTimer = 0;
+                    user.x = yourPlayer.transform.position.x.ToString();
+                    user.y = yourPlayer.transform.position.y.ToString();
+                    networkManager.UpdatePosition(user);
+                }
+            }
+        }
     }
 }

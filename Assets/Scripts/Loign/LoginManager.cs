@@ -47,7 +47,7 @@ public class LoginManager : MonoBehaviour
     private IEnumerator PostLogin(string url, User user)
     {
         var jsonData = JsonUtility.ToJson(user);
-        Debug.Log("JSONdata: " + jsonData);
+        //Debug.Log("JSONdata: " + jsonData);
 
         using (UnityWebRequest www = UnityWebRequest.Post(url, jsonData))
         {
@@ -66,10 +66,11 @@ public class LoginManager : MonoBehaviour
                 {
                     // handle the result
                     string result = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
-                    Debug.Log(result);
+                    // Debug.Log(result);
                     User resultUser = JsonUtility.FromJson<User>(result);
-
                     LoggedInPlayer.instance.user = resultUser;
+                    LoggedInPlayer.instance.user.x = "0.0";
+                    LoggedInPlayer.instance.user.y = "0.0";
                     SceneManager.LoadScene("Menu");
                 }
                 else

@@ -1,5 +1,6 @@
 const path = require("path");
 const Sequelize = require("sequelize");
+const  Vector2 = require('./Classes/Vector2');
 
 const dataDir = path.join(__dirname, "data");
 
@@ -25,7 +26,9 @@ const User = sequelize.define("User",{
     password: Sequelize.STRING,
     nick: Sequelize.STRING,
     wins: Sequelize.INTEGER,
-    loses: Sequelize.INTEGER
+    loses: Sequelize.INTEGER,
+    x: Sequelize.FLOAT,
+    y: Sequelize.FLOAT
 },{
     timestamps: false,
     createdAt: false,

@@ -42,10 +42,17 @@ public class NetworkManager : SocketIOComponent
             firstPlayer.transform.SetParent(parent);
             serverObjects.Add(id, firstPlayer);
 
-            //GameObject newPlayer = new GameObject("Server ID: " + id);
-            //serverObjects.Add(id, newPlayer);
+            LoggedInPlayer.instance.yourPlayer = firstPlayer;
 
             Debug.Log("Create Player");
+        });
+
+        On("update", (e) =>
+        {
+            string x = e.data["x"].ToString().RemoveQuotes();
+            string y = e.data["y"].ToString().RemoveQuotes();
+            Debug.Log("Position x: " + x);
+            Debug.Log("Position y: " + y);
         });
 
         On("disconnected", (e) =>
@@ -61,7 +68,9 @@ public class NetworkManager : SocketIOComponent
 
     public void LogginPlayer(User dataUser)
     {
-        Emit("loginCompleted", new JSONObject(JsonUtility.ToJson(dataUser)), (e) =>
+        string jsonData = JsonUtility.ToJson(dataUser);
+
+        Emit("loginCompleted", new JSONObject(jsonData), (e) =>
         {
             Debug.Log("Zalogowano");
         });
@@ -72,6 +81,17 @@ public class NetworkManager : SocketIOComponent
         Emit("join", (e) =>
         {
             Debug.Log("Dolaczyl do gry");
+        });
+    }
+
+    public void UpdatePosition(User user)
+    {
+        //  Debug.Log("After send x: " + LoggedInPlayer.instance.user.position.x);
+        //   Debug.Log("After send y: " + LoggedInPlayer.instance.user.position.y);
+        string jsonData = JsonUtility.ToJson(user);
+        Emit("updatePosition", new JSONObject(jsonData), (e) =>
+        {
+            Debug.Log("Wysłano pozycje");
         });
     }
 }

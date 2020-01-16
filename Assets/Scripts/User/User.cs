@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 [Serializable]
 public class User
@@ -9,6 +10,8 @@ public class User
     public string nick;
     public int wins;
     public int loses;
+    public string x;
+    public string y;
 
     public User(string email, string password, string nick)
     {
