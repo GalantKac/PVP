@@ -8,7 +8,7 @@ public class MainManager : MonoBehaviour
 
     void Start()
     {
-        LoggedInPlayer.instance.networkManager.parent = playerContainer;
+        LoggedInPlayer.instance.networkManager.playersContainer = playerContainer;
         LoggedInPlayer.instance.networkManager.JoinToGame();
     }
 }

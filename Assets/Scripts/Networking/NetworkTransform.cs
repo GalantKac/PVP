@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace Project.Networiking
+{
+    [RequireComponent(typeof(PlayerIdentity))]
     public class NetworkTransform : MonoBehaviour
     {
         [SerializeField]
@@ -11,29 +14,41 @@ using UnityEngine;
 
         private float timeToRefresh = 0;
 
+        private PlayerIdentity playerIdentity;
+
         public void Start()
         {
+            playerIdentity = GetComponent<PlayerIdentity>();
             oldPosition = transform.position;
             user = new User();
             user.x = "0.0";
             user.y = "0.0";
+
+            if (playerIdentity.IsControlling().Equals(false))
+            {
+                enabled = false;
+            }
         }
 
         private void Update()
         {
-            if(oldPosition != transform.position)
+            if (playerIdentity.IsControlling())
             {
-                oldPosition = transform.position;
-                timeToRefresh = 0;
-                SendData();
-            }else
-            {
-                timeToRefresh += Time.deltaTime;
-
-                if(timeToRefresh >= 1)
+                if (oldPosition != transform.position)
                 {
+                    oldPosition = transform.position;
                     timeToRefresh = 0;
                     SendData();
+                }
+                else
+                {
+                    timeToRefresh += Time.deltaTime;
+
+                    if (timeToRefresh >= 1)
+                    {
+                        timeToRefresh = 0;
+                        SendData();
+                    }
                 }
             }
         }
@@ -45,3 +60,4 @@ using UnityEngine;
             LoggedInPlayer.instance.networkManager.UpdatePosition(user);
         }
     }
+}

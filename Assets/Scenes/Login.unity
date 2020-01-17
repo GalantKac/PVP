@@ -2990,7 +2990,7 @@ MonoBehaviour:
   ackExpirationTime: 1800
   pingInterval: 25
   pingTimeout: 60
-  parent: {fileID: 0}
+  playersContainer: {fileID: 0}
   playerPrefab: {fileID: 1689866831511430, guid: 2e2183501755a214591e802f3aff33d2,
     type: 3}
 --- !u!1 &2035680624

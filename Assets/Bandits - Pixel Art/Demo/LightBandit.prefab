@@ -9,12 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4805181885227780}
-  - component: {fileID: 114850797635947820}
   - component: {fileID: 95346456782871180}
   - component: {fileID: 212259381048184306}
   - component: {fileID: 50512961935941442}
   - component: {fileID: 61252362154681264}
   - component: {fileID: 380623531458994287}
+  - component: {fileID: 2155027486735407214}
+  - component: {fileID: 114850797635947820}
   m_Layer: 0
   m_Name: LightBandit
   m_TagString: Player
@@ -37,20 +38,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114850797635947820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1689866831511430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba8b435a8dc3f604e9a13c4acd7081c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_speed: 3
-  m_jumpForce: 4
 --- !u!95 &95346456782871180
 Animator:
   serializedVersion: 3
@@ -178,6 +165,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a5fef8e6b6d954479b040a7ec490cca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  oldPosition: {x: 0, y: 0, z: 0}
+  user:
+    id: 0
+    email: 
+    password: 
+    nick: 
+    wins: 0
+    loses: 0
+    x: 
+    y: 
+--- !u!114 &2155027486735407214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689866831511430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19f64a2f85e684342b51abfe419306e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 
+  isControling: 0
+--- !u!114 &114850797635947820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689866831511430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba8b435a8dc3f604e9a13c4acd7081c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_speed: 3
+  m_jumpForce: 4
+  playerIdentity: {fileID: 2155027486735407214}
 --- !u!1 &1943394156383696
 GameObject:
   m_ObjectHideFlags: 0
