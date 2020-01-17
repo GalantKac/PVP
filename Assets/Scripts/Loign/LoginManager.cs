@@ -68,9 +68,9 @@ public class LoginManager : MonoBehaviour
                     string result = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
                     // Debug.Log(result);
                     User resultUser = JsonUtility.FromJson<User>(result);
-                    LoggedInPlayer.instance.user = resultUser;
-                    LoggedInPlayer.instance.user.x = "0.0";
-                    LoggedInPlayer.instance.user.y = "0.0";
+                    resultUser.x = "0.0";
+                    resultUser.y = "0.0";
+                    LoggedInPlayer.instance.networkManager.LogginPlayer(resultUser);
                     SceneManager.LoadScene("Menu");
                 }
                 else

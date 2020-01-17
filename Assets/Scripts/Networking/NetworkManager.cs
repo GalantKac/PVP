@@ -12,10 +12,8 @@ public class NetworkManager : SocketIOComponent
     public Transform parent;
 
     [Header("Characters")]
-    [SerializeField] GameObject[] characters;
+    [SerializeField] GameObject playerPrefab;
 
-    [Header("Spawn Points")]
-    public Transform[] spawnPoints;
     public override void Start()
     {
         base.Start();
@@ -36,23 +34,34 @@ public class NetworkManager : SocketIOComponent
         On("spawn", (e) =>
         {
             string id = e.data["id"].ToString().RemoveQuotes();
+            GameObject playerInGame = Instantiate(playerPrefab, parent);
+            playerInGame.name = "Server ID: " + id;
 
-            GameObject firstPlayer = Instantiate(characters[Random.Range(0, 2)], spawnPoints[Random.Range(0, 2)].position, Quaternion.identity);
-            firstPlayer.name = "Server ID: " + id;
-            firstPlayer.transform.SetParent(parent);
-            serverObjects.Add(id, firstPlayer);
+            playerInGame.GetComponent<NetworkTransform>().user.id = int.Parse(id);
+            playerInGame.GetComponent<NetworkTransform>().user.email = e.data["email"].ToString().RemoveQuotes();
+            playerInGame.GetComponent<NetworkTransform>().user.nick = e.data["nick"].ToString().RemoveQuotes();
+            playerInGame.GetComponent<NetworkTransform>().user.password = e.data["password"].ToString().RemoveQuotes();
+            playerInGame.GetComponent<NetworkTransform>().user.wins = int.Parse(e.data["wins"].ToString().RemoveQuotes());
+            playerInGame.GetComponent<NetworkTransform>().user.loses = int.Parse(e.data["loses"].ToString().RemoveQuotes());
+            playerInGame.GetComponent<NetworkTransform>().user.x = e.data["x"].ToString().RemoveQuotes();
+            playerInGame.GetComponent<NetworkTransform>().user.y = e.data["y"].ToString().RemoveQuotes();
 
-            LoggedInPlayer.instance.yourPlayer = firstPlayer;
+            playerInGame.transform.SetParent(parent);
+            serverObjects.Add(id, playerInGame);
 
             Debug.Log("Create Player");
         });
 
-        On("update", (e) =>
+        On("updatePosition", (e) =>
         {
-            string x = e.data["x"].ToString().RemoveQuotes();
-            string y = e.data["y"].ToString().RemoveQuotes();
+            string id = e.data["id"].ToString().RemoveQuotes();
+            float x = e.data["x"].f;
+            float y = e.data["y"].f;
             Debug.Log("Position x: " + x);
             Debug.Log("Position y: " + y);
+
+            GameObject updatePositionObject = serverObjects[id];
+            updatePositionObject.transform.position = new Vector3(x, y, 0);
         });
 
         On("disconnected", (e) =>

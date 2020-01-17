@@ -17,7 +17,6 @@ namespace Project.MenuManager
         private void Start()
         {
             serverLsit.SetActive(false);
-            LoggedInPlayer.instance.networkManager.LogginPlayer(LoggedInPlayer.instance.user);
         }
 
         public void CreateServer()

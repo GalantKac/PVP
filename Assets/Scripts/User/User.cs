@@ -31,4 +31,8 @@ public class User
         this.wins = wins;
         this.loses = loses;
     }
+
+    public User()
+    {
+    }
 }

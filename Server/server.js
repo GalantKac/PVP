@@ -24,11 +24,16 @@ io.on('connection', (socket) => {
             thisUserId = loginUser.id;
             user.x = parseFloat(user.x.replace(",", "."));
             user.y = parseFloat(user.y.replace(",", "."));
+
             console.log(user);
 
+            users[thisUserId] = user;
+            sockets[thisUserId] = socket;
+
+            //wyslij inforamcje o userze w menu
+           // socket.emit('userInformation', (user) =>{});
+
             socket.on('join', () => {
-                users[thisUserId] = user;
-                sockets[thisUserId] = socket;
                 console.log('Join to game Player: ' + thisUserId);
 
                 //wysylanie inforamcji ze sie stowrzylem
@@ -54,7 +59,7 @@ io.on('connection', (socket) => {
                     user.y = tmpY;
                     console.log(user);
 
-                    socket.broadcast.emit('update', user);
+                    socket.broadcast.emit('updatePosition', user);
                 });
             });
         });
