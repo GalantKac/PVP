@@ -7,7 +7,8 @@ using UnityEngine.Networking;
 
 public class RegisterManager : MonoBehaviour
 {
-    string registerURL = "http://127.0.0.1:3000/users";
+    string registerURL = "https://pvp-server.herokuapp.com/users";
+   // string registerURL = "http://localhost:3000/users";
 
     [SerializeField]
     TextMeshProUGUI inputEmail;

@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class LoginManager : MonoBehaviour
 {
-    string loginUrl = "http://127.0.0.1:3000/users/login";
+     string loginUrl = "https://pvp-server.herokuapp.com/users/login";
+    //string loginUrl = "http://localhost:3000/users/login";
 
     [SerializeField]
     TextMeshProUGUI inputEmail;
@@ -68,8 +69,8 @@ public class LoginManager : MonoBehaviour
                     string result = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
                     // Debug.Log(result);
                     User resultUser = JsonUtility.FromJson<User>(result);
-                    resultUser.x = "0.0";
-                    resultUser.y = "0.0";
+                    resultUser.x = "5,312";
+                    resultUser.y = "2,123";
                     LoggedInPlayer.instance.networkManager.LogginPlayer(resultUser);
                     SceneManager.LoadScene("Menu");
                 }

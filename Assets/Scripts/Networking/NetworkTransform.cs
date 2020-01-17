@@ -40,8 +40,8 @@ using UnityEngine;
 
         private void SendData()
         {
-            user.x = oldPosition.x.ToString();
-            user.y = oldPosition.y.ToString();
+            user.x = transform.position.x.ToString();
+            user.y = transform.position.y.ToString();
             LoggedInPlayer.instance.networkManager.UpdatePosition(user);
         }
     }
