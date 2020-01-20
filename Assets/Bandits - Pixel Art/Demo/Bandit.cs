@@ -19,11 +19,15 @@ public class Bandit : MonoBehaviour
     [SerializeField]
     private PlayerIdentity playerIdentity;
 
+    [SerializeField]
+    private NetworkTransform networkTransform;
+
     // Use this for initialization
     void Start()
     {
         m_animator = GetComponent<Animator>();
         m_body2d = GetComponent<Rigidbody2D>();
+        networkTransform = GetComponent<NetworkTransform>();
         m_groundSensor = transform.Find("GroundSensor").GetComponent<Sensor_Bandit>();
     }
 
@@ -51,10 +55,15 @@ public class Bandit : MonoBehaviour
 
             // Swap direction of sprite depending on walk direction
             if (inputX > 0 && !m_animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+            {
                 transform.localScale = new Vector3(-4.0f, 4.0f, 1.0f);
+                networkTransform.SendRotation(-4f);
+            }
             else if (inputX < 0 && !m_animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+            {
                 transform.localScale = new Vector3(4.0f, 4.0f, 1.0f);
-
+                networkTransform.SendRotation(4f);
+            }
             // Move
             m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
 

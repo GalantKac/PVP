@@ -38,7 +38,7 @@ namespace Project.Networiking
                 {
                     oldPosition = transform.position;
                     timeToRefresh = 0;
-                    SendData();
+                    SendPosition();
                 }
                 else
                 {
@@ -47,17 +47,29 @@ namespace Project.Networiking
                     if (timeToRefresh >= 1)
                     {
                         timeToRefresh = 0;
-                        SendData();
+                        SendPosition();
                     }
                 }
             }
         }
 
-        private void SendData()
+        private void SendPosition()
         {
             user.x = transform.position.x.ToString();
             user.y = transform.position.y.ToString();
             LoggedInPlayer.instance.networkManager.UpdatePosition(user);
+        }
+
+        public void SendRotation(float x)
+        {
+            user.rotationX = Mathf.RoundToInt(x);
+            Debug.Log("Rotation:" + user.rotationX);
+            LoggedInPlayer.instance.networkManager.UpdateRotation(user);
+        }
+
+        public void SendAnimationState()
+        {
+
         }
     }
 }

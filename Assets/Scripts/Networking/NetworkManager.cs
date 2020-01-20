@@ -84,11 +84,23 @@ namespace Project.Networiking
                 float y = 1;
                 float.TryParse(ys, out y);
 
-                Debug.Log("Position x: " + x);
-                Debug.Log("Position y: " + y);
+                //Debug.Log("Position x: " + x);
+                //Debug.Log("Position y: " + y);
 
                 PlayerIdentity updatePlayerIdentity = serverObjects[id];
                 updatePlayerIdentity.transform.position = new Vector3(x, y, 0);
+            });
+
+            On("updateRotation", (e) =>
+            {
+                string id = e.data["id"].ToString().RemoveQuotes();
+                string xrotationX = e.data["rotationX"].ToString().RemoveQuotes();
+                float x = 1;
+                float.TryParse(xrotationX, out x);
+
+                Debug.Log("Rotation:" + x);
+                PlayerIdentity updatePlayerIdentity = serverObjects[id];
+                updatePlayerIdentity.transform.localScale = new Vector3(x, 4f, 1f);
             });
 
             On("disconnected", (e) =>
@@ -128,6 +140,15 @@ namespace Project.Networiking
             Emit("updatePosition", new JSONObject(jsonData), (e) =>
             {
                 Debug.Log("Wysłano pozycje");
+            });
+        }
+
+        public void UpdateRotation(User user)
+        {
+            string jsonData = JsonUtility.ToJson(user);
+            Emit("updateRotation", new JSONObject(jsonData), (e) =>
+            {
+                Debug.Log("Wysłano rotacje");
             });
         }
     }
