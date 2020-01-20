@@ -385,7 +385,7 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 5ebd92ec0147c7d4dac5630b51456c5f, type: 2}
-  m_Tag: 
+  m_Tag: Idle
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
@@ -412,7 +412,7 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 6a1ebf4e9e2b85c4dbeebc58d8f911ca, type: 2}
-  m_Tag: 
+  m_Tag: CombatIdle
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
@@ -439,7 +439,7 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: d756094fc5e8c594ba2e2ba808fe9a90, type: 2}
-  m_Tag: 
+  m_Tag: Jump
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
@@ -466,7 +466,7 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: e38cb418ab88f9346b0ebccb770105ee, type: 2}
-  m_Tag: 
+  m_Tag: Death
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
@@ -493,7 +493,7 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 8e501a4decb168e48bb9b17dc0ea2b53, type: 2}
-  m_Tag: 
+  m_Tag: Recoveer
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
@@ -547,7 +547,7 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: f4d08aca8d9c8b24f969b71bcb299c54, type: 2}
-  m_Tag: 
+  m_Tag: Hurt
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 

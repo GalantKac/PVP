@@ -41,6 +41,9 @@ public class Bandit : MonoBehaviour
             {
                 m_grounded = true;
                 m_animator.SetBool("Grounded", m_grounded);
+                //jesli znow worci na ziemie musi byc Idle;
+                networkTransform.user.animState = AnimState.Idle.ToString();
+                networkTransform.SendAnimationState(networkTransform.user.animState);
             }
 
             //Check if character just started falling
@@ -75,48 +78,66 @@ public class Bandit : MonoBehaviour
             if (Input.GetKeyDown("e"))
             {
                 if (!m_isDead)
+                {
                     m_animator.SetTrigger("Death");
+                    networkTransform.user.animState = AnimState.Death.ToString();
+                    networkTransform.SendAnimationState(networkTransform.user.animState);
+                }
                 else
+                {
                     m_animator.SetTrigger("Recover");
-
+                }
                 m_isDead = !m_isDead;
             }
-
             //Hurt
             else if (Input.GetKeyDown("q"))
+            {
                 m_animator.SetTrigger("Hurt");
-
+                networkTransform.user.animState = AnimState.Hurt.ToString();
+                networkTransform.SendAnimationState(networkTransform.user.animState);
+            }
             //Attack
             else if (Input.GetMouseButtonDown(0) && !m_animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack") && !m_animator.GetCurrentAnimatorStateInfo(0).IsTag("Run"))
             {
                 m_animator.SetTrigger("Attack");
+                networkTransform.user.animState = AnimState.Attack.ToString();
+                networkTransform.SendAnimationState(networkTransform.user.animState);
             }
-
             //Change between idle and combat idle
             else if (Input.GetKeyDown("f"))
+            {
                 m_combatIdle = !m_combatIdle;
-
+            }
             //Jump
             else if (Input.GetKeyDown("space") && m_grounded)
             {
                 m_animator.SetTrigger("Jump");
+                networkTransform.user.animState = AnimState.Jump.ToString();
+                networkTransform.SendAnimationState(networkTransform.user.animState);
                 m_grounded = false;
                 m_animator.SetBool("Grounded", m_grounded);
                 m_body2d.velocity = new Vector2(m_body2d.velocity.x, m_jumpForce);
                 m_groundSensor.Disable(0.2f);
             }
-
             //Run
             else if (Mathf.Abs(inputX) > Mathf.Epsilon)
+            {
                 m_animator.SetInteger("AnimState", 2);
-
+                networkTransform.user.animState = AnimState.Run.ToString();
+                networkTransform.SendAnimationState(networkTransform.user.animState);
+            }
             //Combat Idle
             else if (m_combatIdle)
+            {
                 m_animator.SetInteger("AnimState", 1);
-
+            }
             //Idle
             else
+            {
                 m_animator.SetInteger("AnimState", 0);
+                networkTransform.user.animState = AnimState.Idle.ToString();
+                networkTransform.SendAnimationState(networkTransform.user.animState);
+            }
         }
     }
 }

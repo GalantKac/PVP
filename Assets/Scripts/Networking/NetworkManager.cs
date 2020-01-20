@@ -98,9 +98,32 @@ namespace Project.Networiking
                 float x = 1;
                 float.TryParse(xrotationX, out x);
 
-                Debug.Log("Rotation:" + x);
                 PlayerIdentity updatePlayerIdentity = serverObjects[id];
                 updatePlayerIdentity.transform.localScale = new Vector3(x, 4f, 1f);
+            });
+
+            On("updateAnimation", (e) =>
+            {
+                string id = e.data["id"].ToString().RemoveQuotes();
+                string animationState = e.data["animState"].ToString().RemoveQuotes();
+
+                Debug.Log("Animation:" + animationState);
+
+                PlayerIdentity updatePlayerIdentity = serverObjects[id];
+
+                ////warunek dla idle i jump reszta po trigger idzie
+                if (animationState.Equals("Idle"))
+                {
+                    updatePlayerIdentity.GetComponent<Animator>().SetInteger("AnimState", 0);
+                }
+                else if (animationState.Equals("Run"))
+                {
+                    updatePlayerIdentity.GetComponent<Animator>().SetInteger("AnimState", 2);
+                }
+                else
+                {
+                    updatePlayerIdentity.GetComponent<Animator>().SetTrigger(animationState);
+                }
             });
 
             On("disconnected", (e) =>
@@ -149,6 +172,15 @@ namespace Project.Networiking
             Emit("updateRotation", new JSONObject(jsonData), (e) =>
             {
                 Debug.Log("Wysłano rotacje");
+            });
+        }
+
+        public void UpdateAnimation(User user)
+        {
+            string jsonData = JsonUtility.ToJson(user);
+            Emit("updateAnimation", new JSONObject(jsonData), (e) =>
+            {
+                Debug.Log("Wysłano stan animacji");
             });
         }
     }

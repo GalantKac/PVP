@@ -63,13 +63,14 @@ namespace Project.Networiking
         public void SendRotation(float x)
         {
             user.rotationX = Mathf.RoundToInt(x);
-            Debug.Log("Rotation:" + user.rotationX);
             LoggedInPlayer.instance.networkManager.UpdateRotation(user);
         }
 
-        public void SendAnimationState()
+        public void SendAnimationState(string state)
         {
-
+            user.animState = state;
+            Debug.Log("Animation state: " + user.animState);
+            LoggedInPlayer.instance.networkManager.UpdateAnimation(user);
         }
     }
 }

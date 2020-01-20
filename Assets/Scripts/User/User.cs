@@ -13,16 +13,7 @@ public class User
     public string x;
     public string y;
     public int rotationX; //za rotacje odpowiada scala pozycji x
-    AnimState animState = AnimState.Idle;
-
-    public enum AnimState
-    {
-        Run,
-        Attack,
-        Death,
-        Jump,
-        Idle
-    }
+    public string animState = AnimState.Idle.ToString();
 
     public User(string email, string password, string nick)
     {
@@ -46,4 +37,14 @@ public class User
     public User()
     {
     }
+}
+
+public enum AnimState
+{
+    Run,
+    Attack,
+    Death,
+    Jump,
+    Idle,
+    Hurt
 }
