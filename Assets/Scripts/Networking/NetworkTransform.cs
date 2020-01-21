@@ -66,10 +66,11 @@ namespace Project.Networiking
             LoggedInPlayer.instance.networkManager.UpdateRotation(user);
         }
 
-        public void SendAnimationState(string state)
+        public void SendAnimationState(string state, bool value)
         {
             user.animState = state;
-            Debug.Log("Animation state: " + user.animState);
+            user.grounded = value;
+            Debug.Log("Send ----- Animation state: " + user.animState + " grounded: " + user.grounded);
             LoggedInPlayer.instance.networkManager.UpdateAnimation(user);
         }
     }

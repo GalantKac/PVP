@@ -106,23 +106,57 @@ namespace Project.Networiking
             {
                 string id = e.data["id"].ToString().RemoveQuotes();
                 string animationState = e.data["animState"].ToString().RemoveQuotes();
+                bool grounded = e.data["grounded"];
 
-                Debug.Log("Animation:" + animationState);
+                Debug.Log("Get --- Animation:" + animationState + " grounded: " + grounded);
 
                 PlayerIdentity updatePlayerIdentity = serverObjects[id];
 
                 ////warunek dla idle i jump reszta po trigger idzie
-                if (animationState.Equals("Idle"))
+                if (grounded.Equals(true))
                 {
-                    updatePlayerIdentity.GetComponent<Animator>().SetInteger("AnimState", 0);
-                }
-                else if (animationState.Equals("Run"))
-                {
-                    updatePlayerIdentity.GetComponent<Animator>().SetInteger("AnimState", 2);
+                    if (animationState.Equals("Idle"))
+                    {
+                        updatePlayerIdentity.GetComponent<Animator>().SetInteger("AnimState", 0);
+                        updatePlayerIdentity.GetComponent<Bandit>().m_grounded = grounded;
+                        updatePlayerIdentity.GetComponent<Animator>().SetBool("Grounded", grounded);
+                    }
+                    else if (animationState.Equals("Run"))
+                    {
+                        updatePlayerIdentity.GetComponent<Animator>().SetInteger("AnimState", 2);
+                        updatePlayerIdentity.GetComponent<Bandit>().m_grounded = grounded;
+                        updatePlayerIdentity.GetComponent<Animator>().SetBool("Grounded", grounded);
+                    }
+                    else if (animationState.Equals("Jump"))
+                    {
+                        updatePlayerIdentity.GetComponent<Animator>().SetTrigger(animationState);
+                        updatePlayerIdentity.GetComponent<Bandit>().m_grounded = !grounded;
+                        updatePlayerIdentity.GetComponent<Animator>().SetBool("Grounded", !grounded);
+                    }
+                    else if (animationState.Equals("Attack"))
+                    {
+                        updatePlayerIdentity.GetComponent<Animator>().SetTrigger(animationState);
+                        updatePlayerIdentity.GetComponent<Bandit>().m_grounded = grounded;
+                        updatePlayerIdentity.GetComponent<Animator>().SetBool("Grounded", grounded);
+                    }
+                    else if (animationState.Equals("Hurt"))
+                    {
+                        updatePlayerIdentity.GetComponent<Animator>().SetTrigger(animationState);
+                        updatePlayerIdentity.GetComponent<Bandit>().m_grounded = grounded;
+                        updatePlayerIdentity.GetComponent<Animator>().SetBool("Grounded", grounded);
+                    }
+                    else if (animationState.Equals("Death"))
+                    {
+                        updatePlayerIdentity.GetComponent<Animator>().SetTrigger(animationState);
+                        updatePlayerIdentity.GetComponent<Bandit>().m_grounded = grounded;
+                        updatePlayerIdentity.GetComponent<Animator>().SetBool("Grounded", grounded);
+                    }
                 }
                 else
                 {
-                    updatePlayerIdentity.GetComponent<Animator>().SetTrigger(animationState);
+                    updatePlayerIdentity.GetComponent<Animator>().SetTrigger("Jump"); 
+                    updatePlayerIdentity.GetComponent<Bandit>().m_grounded = grounded;
+                    updatePlayerIdentity.GetComponent<Animator>().SetBool("Grounded", grounded);
                 }
             });
 

@@ -14,6 +14,7 @@ public class User
     public string y;
     public int rotationX; //za rotacje odpowiada scala pozycji x
     public string animState = AnimState.Idle.ToString();
+    public bool grounded = false;
 
     public User(string email, string password, string nick)
     {
