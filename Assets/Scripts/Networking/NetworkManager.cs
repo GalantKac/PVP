@@ -50,6 +50,11 @@ namespace Project.Networiking
                 Debug.Log("ID: " + id + " xs: " + xs + " ys: " + xs);
             });
 
+            On("failLogin", (e) =>
+            {
+
+            });
+
             On("spawn", (e) =>
             {
                 string id = e.data["id"].ToString().RemoveQuotes();
@@ -176,6 +181,27 @@ namespace Project.Networiking
                 PlayerIdentity updatePlayerIdentity = serverObjects[id];
                 updatePlayerIdentity.GetComponent<NetworkTransform>().user.hp = newHp;
                 updatePlayerIdentity.GetComponent<NetworkTransform>().hpText.text = newHp.ToString();
+            });
+
+            On("dead", (e) =>
+            {
+                string id = e.data["id"].ToString().RemoveQuotes();
+                bool dead = e.data["isDead"];
+                Debug.Log("ID: " + id + " isDead: " + dead);
+                PlayerIdentity updatePlayerIdentity = serverObjects[id];
+                updatePlayerIdentity.GetComponent<NetworkTransform>().user.isDeath = dead;
+                GameObject playerToRemove = serverObjects[id].gameObject;
+                Destroy(playerToRemove);
+                serverObjects.Remove(id);
+                Debug.Log("Usunalem");
+            });
+
+            On("backToMenu", (e) =>
+            {
+                string id = e.data["id"].ToString().RemoveQuotes();
+
+                PlayerIdentity updatePlayerIdentity = serverObjects[id];
+                updatePlayerIdentity.GetComponent<NetworkTransform>().backButton.SetActive(true);
             });
 
             On("disconnected", (e) =>

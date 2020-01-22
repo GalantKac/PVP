@@ -20,8 +20,12 @@ namespace Project.Networiking
         public TextMeshProUGUI nameText;
         public TextMeshProUGUI hpText;
 
+        public GameObject backButton;
+
         public void Start()
         {
+            backButton = LoggedInPlayer.instance.backButton;
+
             playerIdentity = GetComponent<PlayerIdentity>();
             oldPosition = transform.position;
             user = new User();

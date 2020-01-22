@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class LoginManager : MonoBehaviour
 {
-    // string loginUrl = "https://pvp-server.herokuapp.com/users/login";
-    string loginUrl = "http://localhost:3000/users/login";
+     string loginUrl = "https://pvp-server.herokuapp.com/users/login";
+    //string loginUrl = "http://localhost:3000/users/login";
     //127.0.0.1:3000
 
     [SerializeField]
