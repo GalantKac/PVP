@@ -16,6 +16,10 @@ public class User
     public string animState = AnimState.Idle.ToString();
     public bool grounded = false;
 
+    //stats
+    public int hp = 200;
+    public bool isDeath = false;
+
     public User(string email, string password, string nick)
     {
         this.email = email;
@@ -37,6 +41,11 @@ public class User
 
     public User()
     {
+    }
+
+    public void TakDamage(int damage)
+    {
+        hp -= damage;
     }
 }
 

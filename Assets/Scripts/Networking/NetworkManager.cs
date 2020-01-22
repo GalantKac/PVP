@@ -54,22 +54,28 @@ namespace Project.Networiking
             {
                 string id = e.data["id"].ToString().RemoveQuotes();
                 GameObject playerInGame = Instantiate(playerPrefab, playersContainer);
-                playerInGame.name = "Server ID: " + id;
+                playerInGame.name = id;
                 PlayerIdentity playerIdentity = playerInGame.GetComponent<PlayerIdentity>();
                 playerIdentity.SetControllerID(id);
                 playerIdentity.SetSocketRef(this);
                 playerInGame.transform.SetParent(playersContainer);
                 serverObjects.Add(id, playerIdentity);
 
-                //playerInGame.GetComponent<NetworkTransform>().user.id = int.Parse(id);
-                //playerInGame.GetComponent<NetworkTransform>().user.email = e.data["email"].ToString().RemoveQuotes();
-                //playerInGame.GetComponent<NetworkTransform>().user.nick = e.data["nick"].ToString().RemoveQuotes();
-                //playerInGame.GetComponent<NetworkTransform>().user.password = e.data["password"].ToString().RemoveQuotes();
-                //playerInGame.GetComponent<NetworkTransform>().user.wins = int.Parse(e.data["wins"].ToString().RemoveQuotes());
-                //playerInGame.GetComponent<NetworkTransform>().user.loses = int.Parse(e.data["loses"].ToString().RemoveQuotes());
-                //playerInGame.GetComponent<NetworkTransform>().user.x = e.data["x"].ToString().RemoveQuotes();
-                //playerInGame.GetComponent<NetworkTransform>().user.y = e.data["y"].ToString().RemoveQuotes();
+                playerInGame.GetComponent<NetworkTransform>().user.id = int.Parse(id);
+                playerInGame.GetComponent<NetworkTransform>().user.email = e.data["email"].ToString().RemoveQuotes();
+                playerInGame.GetComponent<NetworkTransform>().user.nick = e.data["nick"].ToString().RemoveQuotes();
+                playerInGame.GetComponent<NetworkTransform>().user.password = e.data["password"].ToString().RemoveQuotes();
+                playerInGame.GetComponent<NetworkTransform>().user.wins = int.Parse(e.data["wins"].ToString().RemoveQuotes());
+                playerInGame.GetComponent<NetworkTransform>().user.loses = int.Parse(e.data["loses"].ToString().RemoveQuotes());
+                playerInGame.GetComponent<NetworkTransform>().user.x = e.data["x"].ToString().RemoveQuotes();
+                playerInGame.GetComponent<NetworkTransform>().user.y = e.data["y"].ToString().RemoveQuotes();
 
+                string hp = e.data["hp"].ToString().RemoveQuotes();
+                int newHp = 200;
+                int.TryParse(hp, out newHp);
+                playerInGame.GetComponent<NetworkTransform>().user.hp = newHp;
+                playerInGame.GetComponent<NetworkTransform>().hpText.text = newHp.ToString();
+                playerInGame.GetComponent<NetworkTransform>().nameText.text = playerInGame.GetComponent<NetworkTransform>().user.nick;
 
                 Debug.Log("Create Player");
             });
@@ -108,7 +114,7 @@ namespace Project.Networiking
                 string animationState = e.data["animState"].ToString().RemoveQuotes();
                 bool grounded = e.data["grounded"];
 
-                Debug.Log("Get --- Animation:" + animationState + " grounded: " + grounded);
+                //Debug.Log("Get --- Animation:" + animationState + " grounded: " + grounded);
 
                 PlayerIdentity updatePlayerIdentity = serverObjects[id];
 
@@ -154,10 +160,22 @@ namespace Project.Networiking
                 }
                 else
                 {
-                    updatePlayerIdentity.GetComponent<Animator>().SetTrigger("Jump"); 
+                    updatePlayerIdentity.GetComponent<Animator>().SetTrigger("Jump");
                     updatePlayerIdentity.GetComponent<Bandit>().m_grounded = grounded;
                     updatePlayerIdentity.GetComponent<Animator>().SetBool("Grounded", grounded);
                 }
+            });
+
+            On("updateHp", (e) =>
+            {
+                string id = e.data["id"].ToString().RemoveQuotes();
+                string hp = e.data["hp"].ToString().RemoveQuotes();
+                int newHp = 1;
+                int.TryParse(hp, out newHp);
+
+                PlayerIdentity updatePlayerIdentity = serverObjects[id];
+                updatePlayerIdentity.GetComponent<NetworkTransform>().user.hp = newHp;
+                updatePlayerIdentity.GetComponent<NetworkTransform>().hpText.text = newHp.ToString();
             });
 
             On("disconnected", (e) =>
@@ -191,8 +209,6 @@ namespace Project.Networiking
 
         public void UpdatePosition(User user)
         {
-            //  Debug.Log("After send x: " + LoggedInPlayer.instance.user.position.x);
-            //   Debug.Log("After send y: " + LoggedInPlayer.instance.user.position.y);
             string jsonData = JsonUtility.ToJson(user);
             Emit("updatePosition", new JSONObject(jsonData), (e) =>
             {
@@ -215,6 +231,15 @@ namespace Project.Networiking
             Emit("updateAnimation", new JSONObject(jsonData), (e) =>
             {
                 Debug.Log("Wysłano stan animacji");
+            });
+        }
+
+        public void UpdateHp(User user)
+        {
+            string jsonData = JsonUtility.ToJson(user);
+            Emit("updateHp", new JSONObject(jsonData), (e) =>
+            {
+                Debug.Log("Wysłano stan hp");
             });
         }
     }

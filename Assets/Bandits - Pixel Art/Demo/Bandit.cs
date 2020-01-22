@@ -22,6 +22,12 @@ public class Bandit : MonoBehaviour
     [SerializeField]
     private NetworkTransform networkTransform;
 
+    [Header("Player Attack")]
+    public Transform attackPosition;
+    public LayerMask whoIsEnemy;
+    public float attackRange;
+    public int damage;
+
     // Use this for initialization
     void Start()
     {
@@ -48,7 +54,6 @@ public class Bandit : MonoBehaviour
             if (m_grounded && !m_groundSensor.State())
             {
                 m_grounded = false;
-
                 networkTransform.user.grounded = false;
                 m_animator.SetBool("Grounded", m_grounded);
             }
@@ -99,11 +104,21 @@ public class Bandit : MonoBehaviour
             //Attack
             else if (Input.GetMouseButtonDown(0) && !m_animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack") && !m_animator.GetCurrentAnimatorStateInfo(0).IsTag("Run"))
             {
-                if (m_grounded)
+                if (m_grounded)// jesli jest na ziemi
                 {
                     m_animator.SetTrigger("Attack");
                     networkTransform.user.animState = AnimState.Attack.ToString();
                     networkTransform.SendAnimationState(networkTransform.user.animState, true);
+                    //zadaj obrazenia wszystkim w tym obszarze i wyslij info do servera (zmien hp gracza, animacja jesli dostal, UI hp zmien)
+                    Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPosition.position, attackRange, whoIsEnemy);
+                    for (int i = 0; i < enemiesToDamage.Length; i++)
+                    {
+                        //if(user.isDeath) // jesli zginie wyslij inna informacje do servera
+                        Debug.Log(enemiesToDamage[i].gameObject.name);
+                        User hitUser = enemiesToDamage[i].GetComponent<NetworkTransform>().user;
+                        hitUser.id = int.Parse(enemiesToDamage[i].gameObject.name);
+                        LoggedInPlayer.instance.networkManager.UpdateHp(enemiesToDamage[i].GetComponent<NetworkTransform>().user);
+                    }
                 }
             }
             //Jump
@@ -136,5 +151,11 @@ public class Bandit : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPosition.position, attackRange);
     }
 }

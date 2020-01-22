@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace Project.Networiking
@@ -15,6 +16,9 @@ namespace Project.Networiking
         private float timeToRefresh = 0;
 
         private PlayerIdentity playerIdentity;
+
+        public TextMeshProUGUI nameText;
+        public TextMeshProUGUI hpText;
 
         public void Start()
         {
@@ -70,7 +74,7 @@ namespace Project.Networiking
         {
             user.animState = state;
             user.grounded = value;
-            Debug.Log("Send ----- Animation state: " + user.animState + " grounded: " + user.grounded);
+            //Debug.Log("Send ----- Animation state: " + user.animState + " grounded: " + user.grounded);
             LoggedInPlayer.instance.networkManager.UpdateAnimation(user);
         }
     }
